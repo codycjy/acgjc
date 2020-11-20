@@ -45,11 +45,11 @@ with open("index2.txt") as f:
             print(x)
         except:
             x += 1
-            print(x,"f")
+            print(x,"failed")
 
+url3='http://www.acgjc.com/storage-download/?code=OTdmMVFDeWZLZ1RnbDV5RUNWbTJGeHB0amdmTU9FL3FPVmRQTmQ4Y0RuL0JydW9lVk5DN0Q4L0Z5TVRUMVVr'
 
-"""url3='http://www.acgjc.com/storage-download/?code=OTdmMVFDeWZLZ1RnbDV5RUNWbTJGeHB0amdmTU9FL3FPVmRQTmQ4Y0RuL0JydW9lVk5DN0Q4L0Z5TVRUMVVr'
-links=requests.get(url3).text
+"""links=requests.get(url3).text
 html=etree.HTML(links)
 tiqu=html.xpath('//*[@id="theme_custom_storage-0-download-pwd"]/@value')
 print(tiqu)
