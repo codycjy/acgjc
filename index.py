@@ -1,26 +1,40 @@
+import re
+import threading
+import time
 import requests
 from lxml import etree
-import re
-import time
+import threadpool
 
 cookie = '__cfduid=dc8603d98c1b7027705a38d798f593e9c1605241305; _ga=GA1.2.1659073861.1605241306; ' \
          '_gid=GA1.2.1335797918.1605886691; Hm_lvt_ed618df76d54605d45b765fc0ce862e6=1605254430,1605508838,1605528938,' \
          '1605886691; Hm_lpvt_ed618df76d54605d45b765fc0ce862e6=1605886697 '
 ua = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
 headers = {'cookie': cookie, 'user-agent': ua}
-"""
-for i in range(178, 201): #获取目录内容
-    url = "http://www.acgjc.com/yy/page/{}/".format(i)
-    mainpage = requests.get(url=url,headers=headers).text
+
+lock = threading.Lock()
+i = 201
 
 
-    a = re.findall("(http://www.acgjc.com/yy/\d*.html?)", mainpage)
-    with open("index2.txt", "a+", encoding="utf-8") as f:
-        for j in a[::2]:
-            f.write(j)
-            f.write("\n")
-    print(i)
-    time.sleep(5)"""
+def getIndex():
+    global i
+    while i < 401:  # 获取目录内容
+        url = "http://www.acgjc.com/yy/page/{}/".format(i)
+        mainpage = requests.get(url=url).text
+        print(i)
+        a = re.findall("(http://www.acgjc.com/yy/\d*.html?)", mainpage)
+        lock.acquire()
+        with open("index3.txt", "a+", encoding="utf-8") as f:
+            for j in a[::2]:
+                f.write(j)
+                f.write("\n")
+        i += 1
+        lock.release()
+
+
+t = threading.Thread(target=getIndex)
+t2 = threading.Thread(target=getIndex)
+t3 = threading.Thread(target=getIndex)
+t4 = threading.Thread(target=getIndex)
 
 
 def x1(line):
@@ -53,13 +67,24 @@ def x3(url3):
         f2.write("\n")
 
 
-if __name__=="__main__":
-    with open("index2.txt", "r") as f:
+def getIndex_multi():
+    t.start()
+    t2.start()
+    t3.start()
+    t4.start()
+
+
+if __name__ == "__main__":
+    #getIndex_multi()
+    pass
+
+"""    with open("index2.txt", "r") as f:
         c = 0
         for line2 in f:
             c += 1
             try:
                 x3(x1(line2.strip()))
             except:
-                print(c,"f")
+                print(c, "f")
             print(c)
+"""
