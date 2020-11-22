@@ -50,18 +50,21 @@ def x2(url3):
     links = requests.get(url3).text
     html = etree.HTML(links)
     tiqu = html.xpath('//*[@id="theme_custom_storage-0-download-pwd"]/@value')
-    print(tiqu)
+
     # print(links)
     link = html.xpath('/html/body/div[4]/div/div[3]/fieldset/div/div[2]/a/@href')
-    print(link)
+    if not link:
+        link = html.xpath('/html/body/div[4]/div/div[3]/fieldset/div/div/a/@href')
+
     name = html.xpath('/html/body/div[4]/div/div[1]/h2/a/text()')
     print(name)
-
-    return link[0], tiqu[0], name[0]
+    print(link)
+    print(tiqu)
+    return link[0], (tiqu[0] if tiqu else ""), name[0]
 
 
 def x3(url3):
-    with open('final_test2.csv', "a+", encoding="utf-8-sig") as f2:
+    with open('finalmu.csv', "a+", encoding="utf-8-sig") as f2:
         l, t, n = x2(url3)
         f2.write("{},{},{}".format(n, l, t))
         f2.write("\n")
@@ -72,19 +75,18 @@ def getIndex_multi():
     t2.start()
     t3.start()
     t4.start()
-
+#o1 = threading.Thread(target=x3)
 
 if __name__ == "__main__":
-    #getIndex_multi()
-    pass
-
-"""    with open("index2.txt", "r") as f:
+    # getIndex_multi()
+    global c
+    with open("index3.txt", "r") as f:
         c = 0
         for line2 in f:
             c += 1
             try:
                 x3(x1(line2.strip()))
+                print(c)
+                time.sleep(1)
             except:
                 print(c, "f")
-            print(c)
-"""
